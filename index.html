@@ -1,72 +1,136 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2FK6B2NTDB"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-2FK6B2NTDB');
-    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giant Robot Fight Club</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            background: black;
-            margin: 0;
-            font-family: sans-serif;
-        }
+        body { background: #050505; margin: 0; font-family: 'Courier New', Courier, monospace; color: #ddd; }
+        header { text-align: center; padding: 60px 20px 20px; }
+        h1 { font-size: clamp(30px, 8vw, 60px); margin: 0; letter-spacing: 4px; text-transform: uppercase; color: #fff; text-shadow: 3px 3px 0px #ff4500; }
+        .social-links { margin: 25px 0; }
+        .social-links a { color: #ff4500; text-decoration: none; margin: 5px 10px; font-size: 16px; font-weight: bold; border: 2px solid #ff4500; padding: 8px 16px; display: inline-block; transition: 0.2s; }
+        .social-links a:hover { background: #ff4500; color: #000; box-shadow: 0 0 15px rgba(255, 69, 0, 0.5); }
 
-        .content {
-            margin: auto;
-            color: white;
-            width: 80%;
-            text-align: center;
-            padding-top: 50px;
-        }
+        .main-container { display: flex; gap: 40px; max-width: 1100px; margin: 40px auto; padding: 0 20px 100px; }
+        .left-side { flex: 1; position: sticky; top: 20px; }
+        .right-side { flex: 1.5; }
+        img.hero-img { width: 100%; border: 3px solid #222; }
 
-        h1 {
-            font-size: 50px;
-            margin: 15px;
-            letter-spacing: 2px;
-        }
+        h2 { font-size: 28px; border-bottom: 2px solid #ff4500; padding-bottom: 10px; color: #fff; }
+        article.post-card { background: #111; border-left: 6px solid #ff4500; padding: 20px; margin-bottom: 40px; }
+        .post-title { color: #ff4500; font-size: 22px; font-weight: bold; text-decoration: none; text-transform: uppercase; display: block; margin-bottom: 10px; }
+        .post-date { font-size: 14px; color: #a6a6a6; margin-bottom: 15px; }
+        .post-content { font-family: sans-serif; line-height: 1.6; }
 
-        a {
-            color: #ff4500;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 18px;
+        @media (max-width: 800px) {
+            .main-container { flex-direction: column; }
+            .left-side { position: static; width: 100%; }
         }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        img {
-            display: block;
-            margin: 30px auto;
+        .post-content img {
             max-width: 100%;
-            height: 300px;
+            height: auto;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .post-content a {
+          color: #ffffff;
+        }
+        .post-content a:hover {
+          color: #ff4500;
         }
     </style>
 </head>
 <body>
-    <div class="content">
+
+    <header>
         <h1>GIANT ROBOT FIGHT CLUB</h1>
-        <p>Shows happening every month!! Check Instagram for latest!</p>
-        
-        <a href="https://www.instagram.com/giantrobotfightclub/">
-            <i class="fab fa-instagram"></i> Instagram
-        </a>
-        
-        <a href="https://www.youtube.com/@GIANTROBOTFIGHTCLUB">
-            <i class="fab fa-youtube"></i> YouTube
-        </a>
+        <div class="social-links">
+            <a href="https://www.instagram.com/giantrobotfightclub/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="https://www.youtube.com/@GIANTROBOTFIGHTCLUB" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+            <a href="http://reddit.com/r/giantrobotfightclub" target="_blank"><i class="fab fa-reddit"></i> Reddit</a>
+        </div>
+    </header>
 
-        <a href="http://reddit.com/r/giantrobotfightclub">
-            <i class="fab fa-reddit"></i> Reddit
-        </a>
+    <main class="main-container">
+        <aside class="left-side">
+            <img src="hotdog.jpg" alt="Robot Art" class="hero-img">
+        </aside>
 
-        <br>
-        <img src="hotdog.jpg" alt="Robot Action">
-    </div>
+        <section class="right-side">
+            <h2>LATEST POSTS</h2>
+            <div id="rss-feed">Loading...</div>
+        </section>
+    </main>
+
+    <script>
+        (async function fetchAndDisplayFeed() {
+            const feedContainer = document.getElementById('rss-feed');
+            const PROXY_URL = 'https://substack-proxy.karaokillmachine.workers.dev/';
+
+            // Helper to safely get text content from a an element's child
+            const getText = (element, selector) => element.querySelector(selector)?.textContent || "";
+
+            // Helper to process post content HTML
+            const processContent = (htmlContent) => {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlContent;
+                // Make all links open in a new tab for security and UX
+                tempDiv.querySelectorAll('a').forEach(link => {
+                    link.setAttribute('target', '_blank');
+                    link.setAttribute('rel', 'noopener noreferrer');
+                });
+                return tempDiv.innerHTML;
+            };
+
+            try {
+                const response = await fetch(PROXY_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const xmlText = await response.text();
+
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+                const items = xmlDoc.querySelectorAll("item");
+
+                if (items.length === 0) {
+                    feedContainer.innerHTML = "No posts found.";
+                    return;
+                }
+
+                // Build the HTML string for all posts and then update the DOM once.
+                const allPostsHtml = Array.from(items).map(item => {
+                    const title = getText(item, "title") || "Untitled Post";
+                    const pubDate = getText(item, "pubDate");
+                    const formattedDate = pubDate ? new Date(pubDate).toLocaleDateString() : "";
+
+                    // Substack puts the full content in <content:encoded>.
+                    // The namespace can make querySelector tricky, so we get it by tag name.
+                    // Fallback to the description if it's not present.
+                    const contentEncoded = item.getElementsByTagName("content:encoded")[0] || item.getElementsByTagName("encoded")[0];
+                    const rawContent = contentEncoded?.textContent || getText(item, "description");
+                    const finalContent = processContent(rawContent);
+
+                    // Note: post title should never be a link!!!!
+                    return `
+                        <article class="post-card">
+                            <span class="post-title">${title}</span>
+                            <div class="post-date">Posted on: ${formattedDate}</div>
+                            <div class="post-content">${finalContent}</div>
+                        </article>
+                    `;
+                }).join('');
+
+                feedContainer.innerHTML = allPostsHtml;
+
+            } catch (error) {
+                console.error("Feed Error:", error);
+                feedContainer.innerHTML = "SYSTEM ERROR: Could not load feed.";
+            }
+        })();
+    </script>
 </body>
 </html>
