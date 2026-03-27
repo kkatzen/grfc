@@ -8,6 +8,7 @@
     <style>
         body { background: #050505; margin: 0; font-family: 'Courier New', Courier, monospace; color: #ddd; }
         header { text-align: center; padding: 60px 20px 20px; }
+        .subtitle {margin-top: 10px;}
         h1 { font-size: clamp(30px, 8vw, 60px); margin: 0; letter-spacing: 4px; text-transform: uppercase; color: #fff; text-shadow: 3px 3px 0px #ff4500; }
         .social-links { margin: 25px 0; }
         .social-links a { color: #ff4500; text-decoration: none; margin: 5px 10px; font-size: 16px; font-weight: bold; border: 2px solid #ff4500; padding: 8px 16px; display: inline-block; transition: 0.2s; }
@@ -47,6 +48,9 @@
 
     <header>
         <h1>GIANT ROBOT FIGHT CLUB</h1>
+        <div class="subtitle">
+            Want to participate?<br/>Want to a host a show at your venue or event?<br/>Email us at giantrobotfightclub@gmail.com
+        </div>
         <div class="social-links">
             <a href="https://www.instagram.com/giantrobotfightclub/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
             <a href="https://www.youtube.com/@GIANTROBOTFIGHTCLUB" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
@@ -70,14 +74,11 @@
             const feedContainer = document.getElementById('rss-feed');
             const PROXY_URL = 'https://substack-proxy.karaokillmachine.workers.dev/';
 
-            // Helper to safely get text content from a an element's child
+            // Helpers to get text and make links open in new tabs
             const getText = (element, selector) => element.querySelector(selector)?.textContent || "";
-
-            // Helper to process post content HTML
             const processContent = (htmlContent) => {
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = htmlContent;
-                // Make all links open in a new tab for security and UX
                 tempDiv.querySelectorAll('a').forEach(link => {
                     link.setAttribute('target', '_blank');
                     link.setAttribute('rel', 'noopener noreferrer');
@@ -91,7 +92,6 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const xmlText = await response.text();
-
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(xmlText, "text/xml");
                 const items = xmlDoc.querySelectorAll("item");
