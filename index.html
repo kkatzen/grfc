@@ -373,6 +373,51 @@
             margin: 0;
         }
 
+        .calendar-add-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .calendar-add-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-heading);
+            font-size: 18px;
+            letter-spacing: 1px;
+            color: var(--text-color-light);
+            background: var(--card-paper-bg);
+            border: 2px solid #000;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            box-shadow: 4px 4px 0px #000;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .calendar-add-btn:hover {
+            background: var(--crimson);
+            color: #fff;
+            border-color: var(--crimson);
+        }
+
+        /* Inline header-specific calendar button styling */
+        h2 .calendar-add-btn {
+            font-size: 16px;
+            padding: 6px 14px;
+            box-shadow: 3px 3px 0px #000;
+            margin-top: 2px; /* Optical alignment adjustment */
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        h2 .calendar-add-btn:active {
+            transform: translate(1px, 1px);
+            box-shadow: 2px 2px 0px #000;
+        }
+
+
+
         /* Media Queries (placed at bottom to override desktop cascade) */
         @media (max-width: 900px) {
             .main-container {
@@ -456,8 +501,18 @@
         <!-- Events Pane -->
         <div id="events-tab" class="tab-content active">
             <section class="events-section">
-                <h2>EVENTS</h2>
+                <h2>
+                    EVENTS
+                    <a href="https://calendar.google.com/calendar/render?cid=e2ee868fc710810ce9f8f39c0191cbd455edf59a196cc2c1d1ba1e34c745ec85@group.calendar.google.com" target="_blank" rel="noopener noreferrer" class="calendar-add-btn">
+                        <i class="far fa-calendar-plus"></i> Subscribe
+                    </a>
+                </h2>
                 <div id="events-feed">Loading...</div>
+                <div class="calendar-add-container">
+                    <a href="https://calendar.google.com/calendar/render?cid=e2ee868fc710810ce9f8f39c0191cbd455edf59a196cc2c1d1ba1e34c745ec85@group.calendar.google.com" target="_blank" rel="noopener noreferrer" class="calendar-add-btn">
+                        <i class="far fa-calendar-plus"></i> Subscribe to Calendar
+                    </a>
+                </div>
             </section>
         </div>
 
@@ -509,12 +564,7 @@
                 return;
             }
             
-            // Only show events that start from the beginning of today (local time)
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const timeMin = today.toISOString();
-            
-            const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?key=${API_KEY}&singleEvents=true&orderBy=startTime&timeMin=${timeMin}&supportsAttachments=true`;
+            const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?key=${API_KEY}&singleEvents=true&orderBy=startTime&supportsAttachments=true`;
 
             // Helper to format dates/times using the event's own timezone or the calendar default
             const formatEventTime = (event) => {
