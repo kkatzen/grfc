@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giant Robot Fight Club</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="config.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #121214;
+            --card-paper-bg: #e3dac9; /* Warm parchment cream from banner */
+            --text-color-dark: #cbd5e1;
+            --text-color-light: #1c1c1f;
+            --crimson: #a30000;
+            --border-color: #000000;
+            --font-heading: 'Bebas Neue', sans-serif;
+            --font-body: 'Space Grotesk', sans-serif;
+            --font-alt: 'Space Mono', monospace; /* Clean monospace typewriter font */
+        }
+
+        body {
+            background: var(--bg-color);
+            margin: 0;
+            font-family: var(--font-body);
+            color: var(--text-color-dark);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px 30px;
+            position: relative;
+        }
+
+        .banner-logo {
+            max-width: 100%;
+            width: 650px;
+            height: auto;
+            border-radius: 8px;
+            border: 3px solid #000;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 30px rgba(163, 0, 0, 0.25);
+        }
+
+
+
+        .social-links {
+            margin: 30px 0 10px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: #fff;
+            text-decoration: none;
+            font-family: var(--font-heading);
+            font-size: 16px;
+            letter-spacing: 1.5px;
+            border: 2px solid #fff;
+            background: transparent;
+            padding: 8px 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .social-links a:hover {
+            border-color: var(--crimson);
+            background: var(--crimson);
+            box-shadow: 0 0 15px rgba(163, 0, 0, 0.6);
+            color: #fff;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 24px 100px;
+        }
+
+        .events-section {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        h2 {
+            font-family: var(--font-heading);
+            font-size: 32px;
+            letter-spacing: 2px;
+            color: #fff;
+            margin: 0 0 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-transform: uppercase;
+        }
+
+        h2::after {
+            content: '';
+            flex: 1;
+            height: 8px;
+            background: repeating-linear-gradient(
+                -45deg,
+                var(--crimson),
+                var(--crimson) 8px,
+                #000 8px,
+                #000 16px
+            );
+            border: 2px solid #000;
+            box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+        }
+
+        article.event-card {
+            background: var(--card-paper-bg);
+            color: var(--text-color-light);
+            border: 3px solid #000;
+            border-radius: 4px;
+            padding: 35px 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 8px 8px 0px #000;
+        }
+
+        .event-title {
+            font-family: var(--font-heading);
+            color: var(--text-color-light);
+            font-size: 34px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 12px;
+            letter-spacing: 1.5px;
+            line-height: 1.1;
+            max-width: calc(100% - 130px);
+        }
+
+        .event-meta {
+            font-family: var(--font-alt);
+            font-size: 14px;
+            color: #3f3f46;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-weight: 700;
+        }
+
+        .event-time, .event-location {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .event-time i { color: var(--crimson); font-size: 16px; }
+        .event-location i { color: var(--crimson); font-size: 16px; }
+
+        .event-location a {
+            color: var(--text-color-light);
+            text-decoration: none;
+            border-bottom: 2px dashed var(--crimson);
+        }
+
+        .event-description {
+            font-size: 15px;
+            color: #27272a;
+            line-height: 1.7;
+        }
+
+        .event-description img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            border: 2px solid #000;
+            margin: 10px 0;
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .event-description a {
+            color: var(--crimson);
+            text-decoration: none;
+            font-weight: 700;
+            border-bottom: 2px solid transparent;
+        }
+
+        img.event-image {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            border: 2px solid #000;
+            margin: 15px 0 20px;
+            display: block;
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .event-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--card-paper-bg);
+            background: #000;
+            text-decoration: none;
+            font-family: var(--font-heading);
+            font-size: 16px;
+            letter-spacing: 1.5px;
+            padding: 10px 28px;
+            margin-top: 20px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            border: 2px solid #000;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.25);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .event-btn:hover {
+            background: var(--crimson);
+            color: #fff;
+            border-color: var(--crimson);
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .sold-out-badge {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            border: 3px double var(--crimson);
+            color: var(--crimson);
+            background: transparent;
+            transform: rotate(-8deg);
+            font-family: var(--font-heading);
+            font-size: 18px;
+            padding: 6px 14px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            box-shadow: 0 0 2px rgba(163, 0, 0, 0.2);
+        }
+
+
+
+        /* Tabs navigation */
+        .tabs-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px auto 40px;
+            max-width: 800px;
+            border-bottom: 3px solid #000;
+            padding-bottom: 0px;
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: #a6a6a6;
+            border: none;
+            font-family: var(--font-heading);
+            font-size: 22px;
+            letter-spacing: 1.5px;
+            padding: 10px 24px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+        }
+
+        .tab-btn.active {
+            color: #fff;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--crimson);
+            border: 2px solid #000;
+            border-bottom: none;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Info section and card styling */
+        .info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-card {
+            background: var(--card-paper-bg);
+            color: var(--text-color-light);
+            border: 3px solid #000;
+            border-radius: 4px;
+            padding: 35px 30px;
+            box-shadow: 8px 8px 0px #000;
+        }
+
+        .info-card h3 {
+            font-family: var(--font-heading);
+            font-size: 26px;
+            letter-spacing: 1px;
+            margin: 25px 0 10px;
+            color: var(--text-color-light);
+        }
+
+        .info-card h3:first-of-type {
+            margin-top: 0;
+        }
+
+        .info-card p {
+            font-size: 16px;
+            line-height: 1.7;
+            margin: 0 0 20px;
+        }
+
+        .info-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-card a {
+            color: var(--crimson);
+            text-decoration: none;
+            font-weight: 700;
+            border-bottom: 2px dashed var(--crimson);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .info-card a:hover {
+            border-color: var(--crimson);
+            border-bottom-style: solid;
+        }
+
+        .faq-item {
+            margin-bottom: 25px;
+        }
+
+        .faq-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .faq-item h3 {
+            font-family: var(--font-heading);
+            font-size: 26px;
+            letter-spacing: 1px;
+            margin: 0 0 10px;
+            color: var(--text-color-light);
+            text-transform: uppercase;
+        }
+
+        .faq-item p {
+            font-size: 16px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* Media Queries (placed at bottom to override desktop cascade) */
+        @media (max-width: 900px) {
+            .main-container {
+                margin: 20px auto;
+                padding-bottom: 60px;
+            }
+            header {
+                padding: 40px 20px 20px;
+            }
+            .banner-logo {
+                width: 100%;
+            }
+            .sold-out-badge {
+                position: relative;
+                top: 0;
+                right: 0;
+                display: inline-block;
+                margin-bottom: 15px;
+                transform: rotate(-3deg);
+                float: right;
+            }
+            .event-title {
+                max-width: 100%;
+            }
+            .tabs-nav {
+                gap: 5px;
+                padding-left: 12px;
+                padding-right: 12px;
+                margin-bottom: 30px;
+                justify-content: space-around;
+            }
+            .tab-btn {
+                font-size: 16px;
+                padding: 8px 12px;
+                letter-spacing: 1px;
+            }
+            .tab-btn.active::after {
+                bottom: -3px;
+                height: 4px;
+            }
+        }
+
+        /* For very small mobile viewports, enable smooth horizontal scrolling so it never wraps */
+        @media (max-width: 480px) {
+            .tabs-nav {
+                justify-content: flex-start;
+                overflow-x: auto;
+                white-space: nowrap;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+            }
+            .tabs-nav::-webkit-scrollbar {
+                display: none;
+            }
+            .tab-btn {
+                flex-shrink: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>
+            <img src="banner.jpg" alt="Giant Robot Fight Club" class="banner-logo">
+        </h1>
+
+        <div class="social-links">
+            <a href="https://www.instagram.com/giantrobotfightclub/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="https://www.youtube.com/@GIANTROBOTFIGHTCLUB" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+            <a href="http://reddit.com/r/giantrobotfightclub" target="_blank"><i class="fab fa-reddit"></i> Reddit</a>
+        </div>
+    </header>
+
+    <div class="tabs-nav">
+        <button class="tab-btn active" data-tab="events">EVENTS</button>
+        <button class="tab-btn" data-tab="faqs">FAQS</button>
+    </div>
+
+    <main class="main-container">
+        <!-- Events Pane -->
+        <div id="events-tab" class="tab-content active">
+            <section class="events-section">
+                <h2>EVENTS</h2>
+                <div id="events-feed">Loading...</div>
+            </section>
+        </div>
+
+        <!-- FAQs Pane -->
+        <div id="faqs-tab" class="tab-content">
+            <section class="info-section">
+                <h2>FAQS</h2>
+                <div class="info-card">
+                    <div class="faq-item">
+                        <h3>WHAT IS IT?</h3>
+                        <p>A comedy show where humans in robot costumes fake fight each other. Check out our social media to get the vibe.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>ARE THERE REAL ROBOTS?</h3>
+                        <p>No, it's humans.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>IS IT FAMILY FRIENDLY?</h3>
+                        <p>GRFC does family friendly, children-oriented events but unless an event is specified as family friendly, assume it is not.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>CAN I GET INVOLVED?</h3>
+                        <p>Sure! Email us at <a href="mailto:giantrobotfightclub@gmail.com">giantrobotfightclub@gmail.com</a></p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>CAN I HAVE GRFC AT MY EVENT / VENUE?</h3>
+                        <p>Maybe! Email us at <a href="mailto:giantrobotfightclub@gmail.com">giantrobotfightclub@gmail.com</a></p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        (async function fetchAndDisplayEvents() {
+            const eventsContainer = document.getElementById('events-feed');
+            const CALENDAR_ID = 'e2ee868fc710810ce9f8f39c0191cbd455edf59a196cc2c1d1ba1e34c745ec85@group.calendar.google.com';
+            let API_KEY = 'AIzaSyAEszwYRvzv58tyGxLUoPXXaIoMZvKgkPU';
+            // Fallback to local config.js if running locally and placeholder is not replaced
+            if ((API_KEY === 'AIzaSyAEszwYRvzv58tyGxLUoPXXaIoMZvKgkPU' || API_KEY.startsWith('__')) && window.GRFC_CONFIG && window.GRFC_CONFIG.API_KEY) {
+                API_KEY = window.GRFC_CONFIG.API_KEY;
+            }
+            
+            if (!API_KEY || API_KEY === 'AIzaSyAEszwYRvzv58tyGxLUoPXXaIoMZvKgkPU' || API_KEY.startsWith('__')) {
+                console.error("Calendar Error: API Key placeholder has not been replaced and config.js is missing.");
+                eventsContainer.innerHTML = "SYSTEM ERROR: API Configuration missing.";
+                return;
+            }
+            
+            // Only show events that start from the beginning of today (local time)
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const timeMin = today.toISOString();
+            
+            const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?key=${API_KEY}&singleEvents=true&orderBy=startTime&timeMin=${timeMin}&supportsAttachments=true`;
+
+            // Helper to format dates/times using the event's own timezone or the calendar default
+            const formatEventTime = (event) => {
+                if (event.start.date) {
+                    // All-day event (format as local date start to prevent timezone offset shift)
+                    const date = new Date(event.start.date + 'T00:00:00');
+                    return date.toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                        timeZone: 'America/New_York'
+                    });
+                } else if (event.start.dateTime) {
+                    const date = new Date(event.start.dateTime);
+                    return date.toLocaleString('en-US', {
+                        weekday: 'long',
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true,
+                        timeZone: 'America/New_York',
+                        timeZoneName: 'short'
+                    });
+                }
+                return '';
+            };
+
+            // Helper to extract links and create a prominent ticket/info button
+            const processDescription = (rawDescription, eventTitle = "") => {
+                if (!rawDescription) return { cleanHtml: '', buttonHtml: '' };
+
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = rawDescription;
+
+                // If description has no links, find raw text URLs and wrap them in <a> tags
+                const links = Array.from(tempDiv.querySelectorAll('a'));
+                if (links.length === 0) {
+                    const urlRegex = /(https?:\/\/[^\s<]+)/g;
+                    tempDiv.innerHTML = tempDiv.innerHTML.replace(urlRegex, (url) => {
+                        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+                    });
+                }
+
+                const allLinks = Array.from(tempDiv.querySelectorAll('a'));
+                let buttonHtml = '';
+
+                if (allLinks.length > 0) {
+                    // Ticket and event keywords to detect primary call-to-action
+                    const ticketKeywords = ['ticket', 'event', 'eventbrite', 'dice.fm', 'rsvp', 'buy', 'register', 'showclix', 'tixr', 'tickettailor'];
+                    
+                    const primaryLink = allLinks.find(link => 
+                        ticketKeywords.some(keyword => link.href.toLowerCase().includes(keyword))
+                    ) || allLinks[0];
+
+                    let buttonText = 'More Info';
+                    if (ticketKeywords.some(keyword => primaryLink.href.toLowerCase().includes(keyword) && keyword !== 'more')) {
+                        buttonText = 'Buy Tickets';
+                    }
+
+                    // If the event title indicates it is sold out, update the button text
+                    const isSoldOut = eventTitle.toLowerCase().includes('sold out') || eventTitle.toLowerCase().includes('soldout');
+                    if (isSoldOut) {
+                        buttonText = 'Sold Out';
+                    }
+
+                    buttonHtml = `
+                        <a href="${primaryLink.href}" class="event-btn" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-ticket-alt"></i> ${buttonText}
+                        </a>
+                    `;
+
+                    // Remove the primary link from description text so it doesn't double-display
+                    primaryLink.remove();
+                }
+
+                // Force remaining links to open in a new tab
+                tempDiv.querySelectorAll('a').forEach(link => {
+                    link.setAttribute('target', '_blank');
+                    link.setAttribute('rel', 'noopener noreferrer');
+                });
+
+                return {
+                    cleanHtml: tempDiv.innerHTML,
+                    buttonHtml: buttonHtml
+                };
+            };
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const events = data.items || [];
+                events.reverse(); // Show the furthest future event at the top
+                const calendarTimezone = data.timeZone || 'UTC';
+
+                if (events.length === 0) {
+                    eventsContainer.innerHTML = "No upcoming events found.";
+                    return;
+                }
+
+                const allEventsHtml = events.map(event => {
+                    const title = event.summary || "Untitled Event";
+                    const formattedTime = formatEventTime(event);
+                    
+                    // Clean up "[SOLD OUT]" from displaying in the title text twice
+                    const cleanTitle = title.replace(/\[\s*sold\s*out\s*\]/gi, '')
+                                            .replace(/\(\s*sold\s*out\s*\)/gi, '')
+                                            .replace(/sold\s*out:?/gi, '')
+                                            .trim();
+
+                    let locationHtml = '';
+                    if (event.location) {
+                        const encodedLocation = encodeURIComponent(event.location);
+                        locationHtml = `
+                            <div class="event-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <a href="https://www.google.com/maps/search/?api=1&query=${encodedLocation}" target="_blank" rel="noopener noreferrer">
+                                    ${event.location}
+                                </a>
+                            </div>
+                        `;
+                    }
+
+                    const { cleanHtml, buttonHtml } = processDescription(event.description, title);
+
+                    // Extract and render Google Drive image attachment if present
+                    let imageHtml = '';
+                    if (event.attachments && event.attachments.length > 0) {
+                        const imageAttachment = event.attachments.find(att => att.mimeType.startsWith('image/'));
+                        if (imageAttachment) {
+                            const fileId = imageAttachment.fileId;
+                            if (fileId) {
+                                // Use Google User Content CDN link for better cross-origin browser compatibility (safari, incognito)
+                                imageHtml = `<img src="https://lh3.googleusercontent.com/d/${fileId}" alt="${cleanTitle}" class="event-image">`;
+                            }
+                        }
+                    }
+
+                    const isSoldOut = title.toLowerCase().includes('sold out') || title.toLowerCase().includes('soldout');
+                    const badgeHtml = isSoldOut 
+                        ? `<span class="sold-out-badge">Sold Out</span>` 
+                        : ``;
+
+                    return `
+                        <article class="event-card">
+                            ${badgeHtml}
+                            <span class="event-title">${cleanTitle}</span>
+                            <div class="event-meta">
+                                <div class="event-time">
+                                    <i class="far fa-calendar-alt"></i> ${formattedTime}
+                                </div>
+                                ${locationHtml}
+                            </div>
+                            ${imageHtml}
+                            <div class="event-description">${cleanHtml}</div>
+                            ${buttonHtml}
+                        </article>
+                    `;
+                }).join('');
+
+                eventsContainer.innerHTML = allEventsHtml;
+
+            } catch (error) {
+                console.error("Calendar Error:", error);
+                eventsContainer.innerHTML = "SYSTEM ERROR: Could not load events.";
+            }
+        })();
+
+        // Tab Switching Logic
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from buttons and content panes
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                // Set active tab
+                btn.classList.add('active');
+                const tabId = btn.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
