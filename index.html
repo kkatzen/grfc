@@ -496,12 +496,14 @@
             const eventsContainer = document.getElementById('events-feed');
             const CALENDAR_ID = 'e2ee868fc710810ce9f8f39c0191cbd455edf59a196cc2c1d1ba1e34c745ec85@group.calendar.google.com';
             let API_KEY = '__API_KEY__';
+            const placeholder = '__' + 'API' + '_KEY__';
+            
             // Fallback to local config.js if running locally and placeholder is not replaced
-            if ((API_KEY === '__API_KEY__' || API_KEY.startsWith('__')) && window.GRFC_CONFIG && window.GRFC_CONFIG.API_KEY) {
+            if ((API_KEY === placeholder || API_KEY.startsWith('__')) && window.GRFC_CONFIG && window.GRFC_CONFIG.API_KEY) {
                 API_KEY = window.GRFC_CONFIG.API_KEY;
             }
             
-            if (!API_KEY || API_KEY === '__API_KEY__' || API_KEY.startsWith('__')) {
+            if (!API_KEY || API_KEY === placeholder || API_KEY.startsWith('__')) {
                 console.error("Calendar Error: API Key placeholder has not been replaced and config.js is missing.");
                 eventsContainer.innerHTML = "SYSTEM ERROR: API Configuration missing.";
                 return;
